@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RedChat Support Mail</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: linear-gradient(140deg, #e9efff, #f7f9fd);
+      font-family: Arial, sans-serif;
+      color: #20314f;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 460px;
+      padding: 25px;
+      border-radius: 18px;
+      border: 1px solid #dce5f2;
+      background: white;
+      box-shadow: 0 15px 45px #20314f12;
+    }
+
+    .banner {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    h1 { font-size: 23px; margin-bottom: 8px; }
+
+    .muted {
+      color: #75839a;
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .detail {
+      padding: 13px;
+      margin: 12px 0;
+      background: #f5f7fc;
+      border: 1px solid #e6ebf5;
+      border-radius: 10px;
+      overflow-wrap: anywhere;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .status {
+      margin-top: 16px;
+      padding: 15px;
+      border-radius: 10px;
+      background: #eef4ff;
+      line-height: 1.6;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 14px;
+      padding: 12px;
+      border: 0;
+      border-radius: 9px;
+      background: #285fe8;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <img class="banner"
+      src="https://i.imgur.com/SX2SgAP.png"
+      alt="RedChat Ban İtiraz Merkezi">
+
+    <h1>RedChat Support</h1>
+    <p class="muted">Ban itirazı bilgilendirme e-postası gönderim durumu</p>
+
+    <div class="detail">
+      <strong>Gönderici</strong><br>
+      RedChat Support<br>
+      redchatbusiness@outlook.com
+    </div>
+
+    <div class="detail">
+      <strong>Alıcı</strong><br>
+      gogeta.blue053wow@gmail.com
+    </div>
+
+    <div class="detail">
+      <strong>Konu</strong><br>
+      RedChat | Ban İtirazınız Hakkında Son Değerlendirme
+    </div>
+
+    <div class="status" id="status" role="status">
+      Sunucu başlatılıyor, durum kontrol ediliyor...
+    </div>
+
+    <button type="button" onclick="checkStatus()">Durumu Yenile</button>
+
+    <p class="muted">
+      E-posta, sunucu başlatıldığında bir kez gönderilmeye çalışılır.
+      Bu sayfadaki düğme e-postayı yeniden göndermez.
+    </p>
+  </main>
+
+  <script>
+    async function checkStatus() {
+      const box = document.getElementById("status");
+
+      try {
+        const response = await fetch("/status", { cache: "no-store" });
+        const data = await response.json();
+
+        box.textContent = data.message || "Durum bilgisi alınamadı.";
+
+        if (data.state === "accepted") {
+          box.textContent += " Brevo'nun kabul etmesi, teslimatın kesinleştiği anlamına gelmez.";
+        }
+      } catch {
+        box.textContent = "Sunucuya ulaşılamadı. Replit Run durumunu kontrol et.";
+      }
+    }
+
+    checkStatus();
+    setInterval(checkStatus, 3000);
+  </script>
+</body>
+</html>
